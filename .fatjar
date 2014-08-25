@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Sun Aug 17 07:09:53 BRT 2014
+onejar.license.required=true
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=DropFTP.jar
+manifest.mergeall=true
+manifest.mainclass=mirrorFTP.Start_APP
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=
+includes=

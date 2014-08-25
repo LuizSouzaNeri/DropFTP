@@ -1,0 +1,20 @@
+				String nome;
+				String[] stringArray = resp.split(" ");
+				String aux = stringArray[0];
+				if (stringArray.length != 0) {
+					System.out.println(aux);
+						if (aux == "drwxr-xr-x") {
+							nome = stringArray[stringArray.length - 1];
+							System.out.println("Pasta: " + nome);
+							System.out.println("Aux é: " + aux);
+							this.aPastaNoFtp.add(nome);
+						}
+						else {
+							nome = stringArray[stringArray.length - 1];
+							System.out.println("File: " + nome);
+							System.out.println("Aux é: " + aux);
+							this.aFilesNoFtp.add(nome);
+						}
+				}
+				aFilesRemFtp.clear();
+				aPastaNoFtpRemovidas.clear();
