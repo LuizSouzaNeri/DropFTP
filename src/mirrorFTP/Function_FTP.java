@@ -269,4 +269,20 @@ public class Function_FTP {
 		this.oscontr.write(comand.getBytes());
 		this.getControlResp();
 	}
+	
+	// CRIAR DIRETÓRIO
+	public void criaDir (String nome, String diretorio) throws IOException {
+		chargeWorkingDir(diretorio);
+		String comand = "MKD " + nome + "\r\n";
+		this.oscontr.write(comand.getBytes());
+		this.getControlResp();
+	}
+	
+	// APAGA DIRETÓRIO
+	public void removeDir (String nome, String diretorio) throws IOException {
+		chargeWorkingDir(diretorio);
+		String comand = "RMD " + nome + "\r\n";
+		this.oscontr.write(comand.getBytes());
+		this.getControlResp();
+	}
 }

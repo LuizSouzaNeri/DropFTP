@@ -25,6 +25,9 @@ public class Drop_FTP {
 	private ArrayList<String> aFilesAmbosDir = new ArrayList<>();
 	private ArrayList<String> aFilesEnvFtp = new ArrayList<>();
 	private ArrayList<String> aFilesRecFtp = new ArrayList<>();
+	private ArrayList<String> aPastasAmbosDir = new ArrayList<>();
+	private ArrayList<String> aPastaRecFtp = new ArrayList<>();
+	private ArrayList<String> aPastaEnvFtp = new ArrayList<>();
 	
 	// CONSTRUTOR DA CLASSE
 	public Drop_FTP () throws IOException {
@@ -55,9 +58,11 @@ public class Drop_FTP {
 		ftp.login();
 		ftp.criaListaArqFTP();
 		pasta.criaListaArqLocal(dirLocal);
-//		this.processaOsDados();
+		verificaFileExcluido();
+		verificaPastaExcluida();
+		this.processaOsDados();
 		feedBack();
-//		sinc();
+		sinc();
 	}
 	
 	// PROCESSA OS DADOS OBTIDOS E FORMA A LISTA DE AQUIVOS DO DISCO, DO FTP E POR ULTIMO GERA ARRAYS
@@ -66,6 +71,7 @@ public class Drop_FTP {
 		this.verificaFileExcluido();
 		this.verificaPastaExcluida();
 		this.comparaFiles();
+		this.comparaPastas();
 		this.comparaArquivoPorData();
 	}
 	
@@ -142,10 +148,10 @@ public class Drop_FTP {
 			String nome = aFilesAmbosDir.get(i);
 			long dataNoFtp = Long.parseLong(ftp.dataModArqFTP(nome, dirRemoto)) - 300;
 			long dataNaPst = Long.parseLong(pasta.dataModArqLocal(nome, dirLocal));
-			if (dataNoFtp - 1 > dataNaPst) {
+			if (dataNoFtp > dataNaPst) {
 				aFilesRecFtp.add(aFilesAmbosDir.get(i));
 			}
-			if (dataNoFtp - 1 < dataNaPst) {
+			if (dataNoFtp < dataNaPst) {
 				aFilesEnvFtp.add(aFilesAmbosDir.get(i));
 			}
 		}
@@ -183,16 +189,16 @@ public class Drop_FTP {
 	}
 	// COMPARA ARQUIVOS COM BASE NO NOME
 	private void comparaPastas() throws IOException {
-		this.aFilesEnvFtp.clear();
-		this.aFilesRecFtp.clear();
-		this.aFilesAmbosDir.clear();
+		this.aPastaEnvFtp.clear();
+		this.aPastaRecFtp.clear();
+		this.aPastasAmbosDir.clear();
 		ArrayList<String> aux = new ArrayList<>();
-		aux.addAll(ftp.aFilesNoFtp);
-		aux.addAll(pasta.aFilesNaPasta);
+		aux.addAll(ftp.aPastaNoFtp);
+		aux.addAll(pasta.aPastas);
 		for (int i = 0; i < aux.size(); i++) {
-			if ((ftp.aFilesNoFtp.contains(aux.get(i))) && (pasta.aFilesNaPasta.contains(aux.get(i)))) {
-				if (this.aFilesAmbosDir.contains(aux.get(i)) == false) {
-					this.aFilesAmbosDir.add(aux.get(i));
+			if ((ftp.aPastaNoFtp.contains(aux.get(i))) && (pasta.aPastas.contains(aux.get(i)))) {
+				if (this.aPastasAmbosDir.contains(aux.get(i)) == false) {
+					this.aPastasAmbosDir.add(aux.get(i));
 					aux.remove(aux.get(i));
 					i--;
 				}
@@ -203,11 +209,11 @@ public class Drop_FTP {
 			}
 		}
 		for (int i = 0; i < aux.size(); i++) {
-			if (ftp.aFilesNoFtp.contains(aux.get(i)) && (ftp.aFilesRemFtp.contains(aux.get(i)) == false)) {
-				this.aFilesRecFtp.add(aux.get(i));
+			if (ftp.aPastaNoFtp.contains(aux.get(i)) && (ftp.aPastaNoFtpRemovidas.contains(aux.get(i)) == false)) {
+				this.aPastaRecFtp.add(aux.get(i));
 			}
-			if (pasta.aFilesNaPasta.contains(aux.get(i)) && (pasta.aFilesRemPasta.contains(aux.get(i)) == false)) {
-				this.aFilesEnvFtp.add(aux.get(i));
+			if (pasta.aPastas.contains(aux.get(i)) && (pasta.aPastasRemovidas.contains(aux.get(i)) == false)) {
+				this.aPastaEnvFtp.add(aux.get(i));
 			}
 		}
 	}
@@ -238,6 +244,8 @@ public class Drop_FTP {
 			for (int i = 0; i < this.aFilesEnvFtp.size(); i++) {
 				String nome = this.aFilesEnvFtp.get(i);
 				ftp.uploadFile(nome, this.dirLocal);
+				long data = Long.parseLong(ftp.dataModArqFTP(nome, dirRemoto)) - 300;
+				pasta.setDataFile(data, nome, dirLocal, aFilesEnvFtp);
 			}
 			this.aFilesEnvFtp.clear();
 			System.out.println("Upload dos arquivos concluído...");
@@ -267,19 +275,40 @@ public class Drop_FTP {
 		System.out.println("<<<<<<<<<<<<<< AÇÕES A SEREM TOMADAS >>>>>>>>>>>>>");
 		System.out.println("<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		System.out.println("<<<<<<<<<<<<<<<<<<< Arq's FTP >>>>>>>>>>>>>>>>>>>>");
+		System.out.println("Files:");
 		imprimirStatus(ftp.aFilesNoFtp);
+		System.out.println("Pastas:");
+		imprimirStatus(ftp.aPastaNoFtp);
 		System.out.println("<<<<<<<<<<<<<<<<<<< Arq's DISC >>>>>>>>>>>>>>>>>>>");
+		System.out.println("Files:");
 		imprimirStatus(pasta.aFilesNaPasta);
+		System.out.println("Pastas:");
+		imprimirStatus(pasta.aPastas);
 		System.out.println("<<<<<<<<<<<<<<<<<<< Arq's em AMBOS >>>>>>>>>>>>>>>");
+		System.out.println("Files:");
 		imprimirStatus(aFilesAmbosDir);
+		System.out.println("Pastas:");
+		imprimirStatus(aPastasAmbosDir);
 		System.out.println("<<<<<<<<<<<<<<<<<<< ENV p/ FTP >>>>>>>>>>>>>>>>>>>");
+		System.out.println("Files:");
 		imprimirStatus(aFilesEnvFtp);
+		System.out.println("Pastas:");
+		imprimirStatus(aPastaEnvFtp);
 		System.out.println("<<<<<<<<<<<<<<<<<<< REC do FTP >>>>>>>>>>>>>>>>>>>");
+		System.out.println("Files:");
 		imprimirStatus(aFilesRecFtp);
+		System.out.println("Pastas:");
+		imprimirStatus(aPastaRecFtp);
 		System.out.println("<<<<<<<<<<<<<<<<<<< EXCLUIR FTP >>>>>>>>>>>>>>>>>>");
+		System.out.println("Files:");
 		imprimirStatus(ftp.aFilesRemFtp);
-		System.out.println("<<<<<<<<<<<<<<<<<<< EXCLUIR PASTA >>>>>>>>>>>>>>>>");
+		System.out.println("Pastas:");
+		imprimirStatus(ftp.aPastaNoFtpRemovidas);
+		System.out.println("<<<<<<<<<<<<<<<<<<< EXCLUIR LOCAL >>>>>>>>>>>>>>>>");
+		System.out.println("Files:");
 		imprimirStatus(pasta.aFilesRemPasta);
+		System.out.println("Pastas:");
+		imprimirStatus(pasta.aPastasRemovidas);
 	}
 	
 }

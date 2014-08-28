@@ -14,11 +14,13 @@ public class Function_Disco {
 	protected ArrayList<String> aPastasRemovidas = new ArrayList<>();
 	
 	//EXCLUIR ARQUIVO
-	public void excluiArq(String nome, String diretorio) {
+	public boolean excluiArq(String nome, String diretorio) {
 		File file = new File (diretorio+nome);
 		if (file.exists()) {
 			file.delete();
+			return true;
 		}
+		return false;
 	}
 	
 	// DATA DE MODIFICAÇÃO ARQUIVO LOCAL
@@ -64,4 +66,19 @@ public class Function_Disco {
 			}
 		}
 	}
+	
+	// SETA DATA ATUALIZADA NO ARQUIVO LOCAL BASEADA NA DATA DO FTP
+	public boolean setDataFile (long data, String nome, String diretorio, ArrayList aFilesEnvFtp) {
+		File arquivo = new File (diretorio);
+		File[] aux = null;
+		aux = arquivo.listFiles();
+		for (int i = 0; i < aFilesEnvFtp.size(); i++) {
+			if (aFilesEnvFtp.get(i) == aux[i].getName()) {
+				aux[i].setLastModified(data);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }
