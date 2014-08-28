@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 
@@ -55,22 +56,17 @@ public class Drop_FTP {
 	
 	// AQUI OS COMANDO PARA A APLICAÇÃO
 	// INICIA APP
-	public void iniciaAplicativo () throws IOException {
+	public void iniciaAplicativo () throws Exception  {
 		this.getDadosInicial();
 		ftp.conect();
 		ftp.login();
-		ftp.uploadFile("teste.txt", dirLocal);
-		long data = Long.parseLong(ftp.dataModArqFTP("teste.txt", dirRemoto)) - 300;
-		System.out.println("Data recuperada: " + data);
-		System.out.println(pasta.setDataFile(data, "teste.txt", dirLocal, aFilesEnvFtp));
-		System.out.println("Data     setada: " + pasta.dataModArqLocal("teste.txt", dirLocal));
-//		ftp.criaListaArqFTP();
-//		pasta.criaListaArqLocal(dirLocal);
-//		verificaFileExcluido();
-//		verificaPastaExcluida();
-//		this.processaOsDados();
-//		feedBack();
-//		sinc();
+		ftp.criaListaArqFTP();
+		pasta.criaListaArqLocal(dirLocal);
+		verificaFileExcluido();
+		verificaPastaExcluida();
+		this.processaOsDados();
+		feedBack();
+		sinc();
 	}
 	
 	// PROCESSA OS DADOS OBTIDOS E FORMA A LISTA DE AQUIVOS DO DISCO, DO FTP E POR ULTIMO GERA ARRAYS
@@ -156,10 +152,10 @@ public class Drop_FTP {
 			String nome = aFilesAmbosDir.get(i);
 			long dataNoFtp = Long.parseLong(ftp.dataModArqFTP(nome, dirRemoto)) - 300;
 			long dataNaPst = Long.parseLong(pasta.dataModArqLocal(nome, dirLocal));
-			if (dataNoFtp > dataNaPst) {
+			if (dataNoFtp - 1 > dataNaPst) {
 				aFilesRecFtp.add(aFilesAmbosDir.get(i));
 			}
-			if (dataNoFtp < dataNaPst) {
+			if (dataNoFtp - 1 < dataNaPst) {
 				aFilesEnvFtp.add(aFilesAmbosDir.get(i));
 			}
 		}
@@ -227,7 +223,7 @@ public class Drop_FTP {
 	}
 	
 	// METODO PARA A SINCRONIZAÇÃO DOS DIRETÓRIOS
-	public void sinc() throws IOException {
+	public void sinc() throws IOException, ParseException {
 		System.out.println("Iniciando a Sincronização dos dados... Aguarde...");
 		if (ftp.aFilesRemFtp.size() != 0) {
 			System.out.println("Apagando do FTP arquivos apagados da Pasta... Aguarde...");
@@ -252,7 +248,7 @@ public class Drop_FTP {
 			for (int i = 0; i < this.aFilesEnvFtp.size(); i++) {
 				String nome = this.aFilesEnvFtp.get(i);
 				ftp.uploadFile(nome, this.dirLocal);
-				long data = Long.parseLong(ftp.dataModArqFTP(nome, dirRemoto)) - 300;
+				String data = ftp.dataModArqFTP(nome, dirRemoto);
 				pasta.setDataFile(data, nome, dirLocal, aFilesEnvFtp);
 			}
 			this.aFilesEnvFtp.clear();
@@ -263,7 +259,7 @@ public class Drop_FTP {
 			for (int i = 0; i < this.aFilesRecFtp.size(); i++) {
 				String nome = this.aFilesRecFtp.get(i);
 				ftp.downloadFile(nome, dirLocal);
-				long data = Long.parseLong(ftp.dataModArqFTP(nome, dirRemoto)) - 300;
+				String data = ftp.dataModArqFTP(nome, dirRemoto);
 				pasta.setDataFile(data, nome, dirLocal, aFilesEnvFtp);
 			}
 			this.aFilesRecFtp.clear();
@@ -320,5 +316,6 @@ public class Drop_FTP {
 		System.out.println("Pastas:");
 		imprimirStatus(pasta.aPastasRemovidas);
 	}
+
 	
 }

@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 public class Function_Disco {
@@ -70,13 +71,17 @@ public class Function_Disco {
 	}
 	
 	// SETA DATA ATUALIZADA NO ARQUIVO LOCAL BASEADA NA DATA DO FTP
-	public boolean setDataFile (long data, String nome, String diretorio, ArrayList aFilesEnvFtp) {
+	public boolean setDataFile (String data, String nome, String diretorio, ArrayList aFilesEnvFtp) throws ParseException {
 		File arquivo = new File (diretorio);
 		File[] aux = null;
 		aux = arquivo.listFiles();
 		for (int i = 0; i < aux.length; i++) {
 			if (nome.equals(aux[i].getName())) {
-				aux[i].setLastModified(data);
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+				dateFormat.setTimeZone(TimeZone.getTimeZone("UTC-3"));
+				String newLastModifiedString = data;
+				Date newLastModifiedDate = dateFormat.parse(newLastModifiedString);
+				aux[i].setLastModified(newLastModifiedDate.getTime());
 				return true;
 			}
 		}
