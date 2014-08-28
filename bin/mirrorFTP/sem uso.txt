@@ -1,20 +1,48 @@
-				String nome;
-				String[] stringArray = resp.split(" ");
-				String aux = stringArray[0];
-				if (stringArray.length != 0) {
-					System.out.println(aux);
-						if (aux == "drwxr-xr-x") {
-							nome = stringArray[stringArray.length - 1];
-							System.out.println("Pasta: " + nome);
-							System.out.println("Aux é: " + aux);
-							this.aPastaNoFtp.add(nome);
-						}
-						else {
-							nome = stringArray[stringArray.length - 1];
-							System.out.println("File: " + nome);
-							System.out.println("Aux é: " + aux);
-							this.aFilesNoFtp.add(nome);
-						}
+		if ((aFilesNoFtp.size() == 0) && (aPastaNoFtp.size() == 0)) {
+			this.pasvMOD();
+			String comand = "NLST\r\n";
+			this.oscontr.write(comand.getBytes());
+			this.getControlResp();
+			BufferedReader br = new BufferedReader(new InputStreamReader(isDados));
+			String resp = "";
+			String line;
+			while ((line = br.readLine())!= null){
+				resp = resp + "\n" + line;
+				if (resp.contains(".") == true) {
+					this.aFilesNoFtp.add(resp);
+					resp = "";
 				}
-				aFilesRemFtp.clear();
-				aPastaNoFtpRemovidas.clear();
+				else {
+					this.aPastaNoFtp.add(resp);
+					resp = "";
+				}
+			}
+			aFilesRemFtp.clear();
+			aPastaNoFtpRemovidas.clear();
+			this.getControlResp();
+		}
+		else {
+			aFilesRemFtp.addAll(aFilesNoFtp);
+			aFilesNoFtp.clear();
+			aPastaNoFtpRemovidas.addAll(aPastaNoFtp);
+			aPastaNoFtp.clear();
+			this.pasvMOD();
+			String comand = "NLST\r\n";
+			this.oscontr.write(comand.getBytes());
+			this.getControlResp();
+			BufferedReader br = new BufferedReader(new InputStreamReader(isDados));
+			String resp = "";
+			String line;
+			while ((line = br.readLine())!= null){
+				resp = resp + "\n" + line;
+				if (resp.contains(".") == true) {
+					this.aFilesNoFtp.add(resp);
+					resp = "";
+				}
+				else {
+					this.aPastaNoFtp.add(resp);
+					resp = "";
+				}
+			}
+			this.getControlResp();
+		}

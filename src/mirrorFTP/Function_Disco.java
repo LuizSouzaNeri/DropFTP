@@ -1,5 +1,6 @@
 package mirrorFTP;
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,7 @@ public class Function_Disco {
 				}
 				else {
 					this.aPastas.add(aux[i].getName());
+					
 				}
 			}
 			this.aFilesRemPasta.clear();
@@ -72,8 +74,8 @@ public class Function_Disco {
 		File arquivo = new File (diretorio);
 		File[] aux = null;
 		aux = arquivo.listFiles();
-		for (int i = 0; i < aFilesEnvFtp.size(); i++) {
-			if (aFilesEnvFtp.get(i) == aux[i].getName()) {
+		for (int i = 0; i < aux.length; i++) {
+			if (nome.equals(aux[i].getName())) {
 				aux[i].setLastModified(data);
 				return true;
 			}

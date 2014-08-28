@@ -142,7 +142,7 @@ public class Function_FTP {
 	// LISTA DIRETORIO
 	public String list (String path) throws IOException{
 		this.pasvMOD();
-		String comand = "NLST\r\n";
+		String comand = "LIST\r\n";
 		this.oscontr.write(comand.getBytes());
 		this.getControlResp();
 		BufferedReader br = new BufferedReader(new InputStreamReader(isDados));
@@ -159,27 +159,28 @@ public class Function_FTP {
 	// CRIA LISTA DIRETORIO
 	public void criaListaArqFTP () throws IOException {
 		if ((aFilesNoFtp.size() == 0) && (aPastaNoFtp.size() == 0)) {
-			this.pasvMOD();
-			String comand = "NLST\r\n";
-			this.oscontr.write(comand.getBytes());
-			this.getControlResp();
-			BufferedReader br = new BufferedReader(new InputStreamReader(isDados));
-			String resp = "";
-			String line;
+		this.pasvMOD();
+		String comand = "LIST\r\n";
+		this.oscontr.write(comand.getBytes());
+		this.getControlResp();
+		BufferedReader br = new BufferedReader(new InputStreamReader(isDados));
+		String resp = "";
+		String line;
+		String array[] = new String[2];
 			while ((line = br.readLine())!= null){
 				resp = resp + "\n" + line;
-				if (resp.contains(".") == true) {
+	 			array = resp.split(":");
+				if (array[0].contains("-rw-r--r--") == true) {
+					String aux = array[1];
+					resp = aux.substring(3,aux.length()).trim();
 					this.aFilesNoFtp.add(resp);
-					resp = "";
 				}
 				else {
+					String aux = array[1];
+					resp = aux.substring(3,aux.length()).trim();
 					this.aPastaNoFtp.add(resp);
-					resp = "";
 				}
 			}
-			aFilesRemFtp.clear();
-			aPastaNoFtpRemovidas.clear();
-			this.getControlResp();
 		}
 		else {
 			aFilesRemFtp.addAll(aFilesNoFtp);
@@ -187,25 +188,29 @@ public class Function_FTP {
 			aPastaNoFtpRemovidas.addAll(aPastaNoFtp);
 			aPastaNoFtp.clear();
 			this.pasvMOD();
-			String comand = "NLST\r\n";
+			String comand = "LIST\r\n";
 			this.oscontr.write(comand.getBytes());
 			this.getControlResp();
 			BufferedReader br = new BufferedReader(new InputStreamReader(isDados));
 			String resp = "";
 			String line;
-			while ((line = br.readLine())!= null){
-				resp = resp + "\n" + line;
-				if (resp.contains(".") == true) {
-					this.aFilesNoFtp.add(resp);
-					resp = "";
+			String array[] = new String[2];
+				while ((line = br.readLine())!= null){
+					resp = resp + "\n" + line;
+		 			array = resp.split(":");
+					if (array[0].contains("-rw-r--r--") == true) {
+						String aux = array[1];
+						resp = aux.substring(3,aux.length()).trim();
+						this.aFilesNoFtp.add(resp);
+					}
+					else {
+						String aux = array[1];
+						resp = aux.substring(3,aux.length()).trim();
+						this.aPastaNoFtp.add(resp);
+					}
 				}
-				else {
-					this.aPastaNoFtp.add(resp);
-					resp = "";
-				}
-			}
-			this.getControlResp();
 		}
+		this.getControlResp();
 	}
 	
 	// BAIXAR ARQUIVOS DO FTP
@@ -216,6 +221,7 @@ public class Function_FTP {
 		this.oscontr.write(comand.getBytes());
 		this.getControlResp();
 		File file = new File (diretorio + nome);
+		System.out.println(diretorio+nome);
 		FileOutputStream fos = new FileOutputStream(file);
 		byte[] buf = new byte[1000];
 		int len;

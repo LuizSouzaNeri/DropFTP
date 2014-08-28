@@ -12,10 +12,12 @@ public class Drop_FTP {
 	
 	// VARIAVÉIS DO APP
 	private int intervalo;		
-	private Function_Disco pasta;
-	private Function_FTP ftp;
 	private String dirLocal;
 	private String dirRemoto;
+	
+	private Function_Disco pasta;
+	private Function_FTP ftp;
+	private listPasta listPst;
 	
 	public int getIntervalo() {
 		return intervalo;
@@ -33,6 +35,7 @@ public class Drop_FTP {
 	public Drop_FTP () throws IOException {
 		pasta = new Function_Disco();
 		ftp = new Function_FTP();
+		listPst = new listPasta();
 	}
 	
 	// INICIA A CAPTURA DOS DADOS
@@ -56,13 +59,18 @@ public class Drop_FTP {
 		this.getDadosInicial();
 		ftp.conect();
 		ftp.login();
-		ftp.criaListaArqFTP();
-		pasta.criaListaArqLocal(dirLocal);
-		verificaFileExcluido();
-		verificaPastaExcluida();
-		this.processaOsDados();
-		feedBack();
-		sinc();
+		ftp.uploadFile("teste.txt", dirLocal);
+		long data = Long.parseLong(ftp.dataModArqFTP("teste.txt", dirRemoto)) - 300;
+		System.out.println("Data recuperada: " + data);
+		System.out.println(pasta.setDataFile(data, "teste.txt", dirLocal, aFilesEnvFtp));
+		System.out.println("Data     setada: " + pasta.dataModArqLocal("teste.txt", dirLocal));
+//		ftp.criaListaArqFTP();
+//		pasta.criaListaArqLocal(dirLocal);
+//		verificaFileExcluido();
+//		verificaPastaExcluida();
+//		this.processaOsDados();
+//		feedBack();
+//		sinc();
 	}
 	
 	// PROCESSA OS DADOS OBTIDOS E FORMA A LISTA DE AQUIVOS DO DISCO, DO FTP E POR ULTIMO GERA ARRAYS
@@ -254,7 +262,9 @@ public class Drop_FTP {
 			System.out.println("Download dos arquivos... Aguarde...");
 			for (int i = 0; i < this.aFilesRecFtp.size(); i++) {
 				String nome = this.aFilesRecFtp.get(i);
-				ftp.downloadFile(nome, this.dirLocal);
+				ftp.downloadFile(nome, dirLocal);
+				long data = Long.parseLong(ftp.dataModArqFTP(nome, dirRemoto)) - 300;
+				pasta.setDataFile(data, nome, dirLocal, aFilesEnvFtp);
 			}
 			this.aFilesRecFtp.clear();
 			System.out.println("Download dos arquivos concluído...");
