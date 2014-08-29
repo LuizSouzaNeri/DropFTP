@@ -18,13 +18,16 @@ public class Drop_FTP {
 	
 	private Function_Disco pasta;
 	private Function_FTP ftp;
-	private listPasta listPst;
+	private ListaEnc lista;
+	private No no;
 	
 	public int getIntervalo() {
 		return intervalo;
 	}
 	
 	// ARRAYS
+	private ArrayList<ListaEnc> arquivos = new ArrayList<ListaEnc>();
+		
 	private ArrayList<String> aFilesAmbosDir = new ArrayList<>();
 	private ArrayList<String> aFilesEnvFtp = new ArrayList<>();
 	private ArrayList<String> aFilesRecFtp = new ArrayList<>();
@@ -36,7 +39,9 @@ public class Drop_FTP {
 	public Drop_FTP () throws IOException {
 		pasta = new Function_Disco();
 		ftp = new Function_FTP();
-		listPst = new listPasta();
+		lista = new ListaEnc();
+		no = new No();
+		
 	}
 	
 	// INICIA A CAPTURA DOS DADOS
