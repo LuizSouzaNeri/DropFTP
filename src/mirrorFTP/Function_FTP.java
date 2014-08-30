@@ -281,7 +281,7 @@ public class Function_FTP {
 	}
 	
 	// CRIAR DIRETÓRIO
-	public void criaDir (String nome, String diretorio) throws IOException {
+	public void criaDir (String diretorio, String nome) throws IOException {
 		chargeWorkingDir(diretorio);
 		String comand = "MKD " + nome + "\r\n";
 		this.oscontr.write(comand.getBytes());
