@@ -82,9 +82,10 @@ public class Drop_FTP {
 		ftp.criaListaArqFTP(dirRemoto);
 		pasta.criaListaArqLocal(dirLocal);
 		this.processaOsDados();
-		recusao();
 		feedBack();
 		sinc();
+		start();
+		recusao();
 	}
 
 	public void iniciaAplicativo(String local, String remoto) throws Exception {
@@ -94,9 +95,10 @@ public class Drop_FTP {
 		ftp.criaListaArqFTP(dirRemoto);
 		pasta.criaListaArqLocal(dirLocal);
 		this.processaOsDados();
-		recusao();
 		feedBack();
 		sinc();
+		start();
+		recusao();
 	}
 
 	// PROCESSA OS DADOS OBTIDOS E FORMA A LISTA DE AQUIVOS DO DISCO, DO FTP E
@@ -261,7 +263,7 @@ public class Drop_FTP {
 		}
 	}
 
-	// EM CASO DE HAVER PASTAS DENTRO DO DIRETUAL ATUAL
+	// EM CASO DE HAVER PASTAS DENTRO DO DIRETORIO ATUAL
 	public void recusao() throws Exception {
 		String localAtual;
 		String remotoAtual;
@@ -348,8 +350,8 @@ public class Drop_FTP {
 			System.out.println("Download dos arquivos concluído...");
 		}
 		aFilesAmbosDir.clear();
-		finalizar();
 		System.out.println("Sincronização Concluída...");
+		finalizar();
 	}
 
 	// MÉTODO PARA IMPRIMIR O CONTEÚDO DOS ARRAYSLIST
