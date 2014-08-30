@@ -294,7 +294,7 @@ public class Drop_FTP {
 				remotoAtual = dirRemoto + aPastaRecFtp.get(i);
 				pasta.criaDir(dirLocal, aPastaRecFtp.get(i));
 				finalizar();
-				localAtual = dirLocal + localAtual + "/";
+				localAtual = dirLocal + aPastaRecFtp.get(i) + "/";
 				remotoAtual = dirRemoto + remotoAtual + "/";
 				iniciaAplicativo(localAtual, remotoAtual);
 			}
