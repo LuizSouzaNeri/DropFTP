@@ -82,10 +82,10 @@ public class Drop_FTP {
 		ftp.criaListaArqFTP(dirRemoto);
 		pasta.criaListaArqLocal(dirLocal);
 		this.processaOsDados();
+		// pasta.aFilesRemPasta.add("teste10");
 		feedBack();
 		sinc();
-		start();
-		recusao();
+		recSincPasta();
 	}
 
 	public void iniciaAplicativo(String local, String remoto) throws Exception {
@@ -95,10 +95,10 @@ public class Drop_FTP {
 		ftp.criaListaArqFTP(dirRemoto);
 		pasta.criaListaArqLocal(dirLocal);
 		this.processaOsDados();
+		// pasta.aFilesRemPasta.add("teste10");
 		feedBack();
 		sinc();
-		start();
-		recusao();
+		recSincPasta();
 	}
 
 	// PROCESSA OS DADOS OBTIDOS E FORMA A LISTA DE AQUIVOS DO DISCO, DO FTP E
@@ -264,44 +264,48 @@ public class Drop_FTP {
 	}
 
 	// EM CASO DE HAVER PASTAS DENTRO DO DIRETORIO ATUAL
-	public void recusao() throws Exception {
-		String localAtual;
-		String remotoAtual;
-		String nome;
-		if ((aPastasAmbosDir.size()) != 0) {
-			for (int i = 0; i < aPastasAmbosDir.size(); i++) {
-				localAtual = dirLocal + aPastasAmbosDir.get(i)  + "/";
-				remotoAtual = dirRemoto + aPastasAmbosDir.get(i) + "/";
-				finalizar();
-				iniciaAplicativo(localAtual, remotoAtual);
-			}
+	public void recSincPasta() throws Exception {
+		if (((aPastasAmbosDir.size()) != 0) || ((aPastaEnvFtp.size()) != 0)
+				|| ((aPastaRecFtp.size()) != 0)) {
+			start();
+			String localAtual;
+			String remotoAtual;
+			String nome;
+			if ((aPastasAmbosDir.size()) != 0) {
+				for (int i = 0; i < aPastasAmbosDir.size(); i++) {
+					localAtual = dirLocal + aPastasAmbosDir.get(i) + "/";
+					remotoAtual = dirRemoto + aPastasAmbosDir.get(i) + "/";
+					finalizar();
+					iniciaAplicativo(localAtual, remotoAtual);
+				}
 
-		}
-		if ((aPastaEnvFtp.size()) != 0) {
-			for (int i = 0; i < aPastaEnvFtp.size(); i++) {
-				nome = aPastaEnvFtp.get(i);
-				localAtual = aPastaEnvFtp.get(i);
-				remotoAtual = aPastaEnvFtp.get(i);
-				ftp.criaDir(dirRemoto, nome);
-				finalizar();
-				localAtual = dirLocal + localAtual + "/";
-				remotoAtual = dirRemoto + remotoAtual + "/";
-				iniciaAplicativo(localAtual, remotoAtual);
 			}
-		}
-		if ((aPastaRecFtp.size()) != 0) {
-			for (int i = 0; i < aPastaRecFtp.size(); i++) {
-				nome = aPastaRecFtp.get(i);
-				localAtual = dirLocal;
-				remotoAtual = dirRemoto + aPastaRecFtp.get(i);
-				pasta.criaDir(dirLocal, aPastaRecFtp.get(i));
-				finalizar();
-				localAtual = dirLocal + aPastaRecFtp.get(i) + "/";
-				remotoAtual = dirRemoto + remotoAtual + "/";
-				iniciaAplicativo(localAtual, remotoAtual);
+			if ((aPastaEnvFtp.size()) != 0) {
+				for (int i = 0; i < aPastaEnvFtp.size(); i++) {
+					nome = aPastaEnvFtp.get(i);
+					localAtual = aPastaEnvFtp.get(i);
+					remotoAtual = aPastaEnvFtp.get(i);
+					ftp.criaDir(dirRemoto, nome);
+					finalizar();
+					localAtual = dirLocal + localAtual + "/";
+					remotoAtual = dirRemoto + remotoAtual + "/";
+					iniciaAplicativo(localAtual, remotoAtual);
+				}
 			}
+			if ((aPastaRecFtp.size()) != 0) {
+				for (int i = 0; i < aPastaRecFtp.size(); i++) {
+					nome = aPastaRecFtp.get(i);
+					localAtual = dirLocal;
+					remotoAtual = dirRemoto + aPastaRecFtp.get(i);
+					pasta.criaDir(dirLocal, aPastaRecFtp.get(i));
+					finalizar();
+					localAtual = dirLocal + aPastaRecFtp.get(i) + "/";
+					remotoAtual = dirRemoto + remotoAtual + "/";
+					iniciaAplicativo(localAtual, remotoAtual);
+				}
+			}
+			finalizar();
 		}
-
 	}
 
 	// METODO PARA A SINCRONIZAÇÃO DOS DIRETÓRIOS

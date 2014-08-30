@@ -1,48 +1,12 @@
-		if ((aFilesNoFtp.size() == 0) && (aPastaNoFtp.size() == 0)) {
-			this.pasvMOD();
-			String comand = "NLST\r\n";
-			this.oscontr.write(comand.getBytes());
-			this.getControlResp();
-			BufferedReader br = new BufferedReader(new InputStreamReader(isDados));
-			String resp = "";
-			String line;
-			while ((line = br.readLine())!= null){
-				resp = resp + "\n" + line;
-				if (resp.contains(".") == true) {
-					this.aFilesNoFtp.add(resp);
-					resp = "";
-				}
-				else {
-					this.aPastaNoFtp.add(resp);
-					resp = "";
-				}
+		if ((pasta.aPastasRemovidas.size()!= 0)) {
+			for (int i = 0; i < pasta.aPastasRemovidas.size(); i++) {
+				nome = pasta.aPastasRemovidas.get(i);
+				localAtual = dirLocal;
+				remotoAtual = dirRemoto + aPastaRecFtp.get(i);
+
 			}
-			aFilesRemFtp.clear();
-			aPastaNoFtpRemovidas.clear();
-			this.getControlResp();
 		}
-		else {
-			aFilesRemFtp.addAll(aFilesNoFtp);
-			aFilesNoFtp.clear();
-			aPastaNoFtpRemovidas.addAll(aPastaNoFtp);
-			aPastaNoFtp.clear();
-			this.pasvMOD();
-			String comand = "NLST\r\n";
-			this.oscontr.write(comand.getBytes());
-			this.getControlResp();
-			BufferedReader br = new BufferedReader(new InputStreamReader(isDados));
-			String resp = "";
-			String line;
-			while ((line = br.readLine())!= null){
-				resp = resp + "\n" + line;
-				if (resp.contains(".") == true) {
-					this.aFilesNoFtp.add(resp);
-					resp = "";
-				}
-				else {
-					this.aPastaNoFtp.add(resp);
-					resp = "";
-				}
-			}
-			this.getControlResp();
+		if ((ftp.aPastaNoFtpRemovidas.size()!= 0)) {
+			
 		}
+	}
