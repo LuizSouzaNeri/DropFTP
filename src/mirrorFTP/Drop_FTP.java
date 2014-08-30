@@ -263,7 +263,7 @@ public class Drop_FTP {
 		}
 	}
 
-	// EM CASO DE HAVER PASTAS DENTRO DO DIRETORIO ATUAL
+	// EM CASO DE HAVER PASTAS DENTRO DE PASTAS
 	public void recSincPasta() throws Exception {
 		if (((aPastasAmbosDir.size()) != 0) || ((aPastaEnvFtp.size()) != 0)
 				|| ((aPastaRecFtp.size()) != 0)) {
@@ -308,6 +308,27 @@ public class Drop_FTP {
 		}
 	}
 
+	// EM CASO DE HAVER PASTAS REMOVIDAS DENTRO DE PASTAS
+	public void recSincPastaRem() {
+		if (((pasta.aPastasRemovidas.size() != 0))
+				|| ((ftp.aPastaNoFtpRemovidas.size() != 0))) {
+			String nome;
+			String localAtual;
+			String remotoAtual;
+			if ((pasta.aPastasRemovidas.size() != 0)) {
+				for (int i = 0; i < pasta.aPastasRemovidas.size(); i++) {
+					nome = pasta.aPastasRemovidas.get(i);
+					localAtual = dirLocal;
+					remotoAtual = dirRemoto + aPastaRecFtp.get(i);
+
+				}
+			}
+			if ((ftp.aPastaNoFtpRemovidas.size() != 0)) {
+
+			}
+		}
+	}
+
 	// METODO PARA A SINCRONIZAÇÃO DOS DIRETÓRIOS
 	public void sinc() throws IOException, ParseException {
 		System.out.println("Iniciando a Sincronização dos dados... Aguarde...");
@@ -337,7 +358,7 @@ public class Drop_FTP {
 				String nome = this.aFilesEnvFtp.get(i);
 				ftp.uploadFile(nome, dirLocal);
 				String data = ftp.dataModArqFTP(nome, dirRemoto);
-				pasta.setDataFile(data, nome, dirLocal, aFilesEnvFtp);
+				pasta.setDataFile(data, nome, dirLocal);
 			}
 			this.aFilesEnvFtp.clear();
 			System.out.println("Upload dos arquivos concluído...");
@@ -348,7 +369,7 @@ public class Drop_FTP {
 				String nome = this.aFilesRecFtp.get(i);
 				ftp.downloadFile(nome, dirLocal);
 				String data = ftp.dataModArqFTP(nome, dirRemoto);
-				pasta.setDataFile(data, nome, dirLocal, aFilesEnvFtp);
+				pasta.setDataFile(data, nome, dirLocal);
 			}
 			this.aFilesRecFtp.clear();
 			System.out.println("Download dos arquivos concluído...");
