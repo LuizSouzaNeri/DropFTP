@@ -18,31 +18,32 @@ public class Drop_FTP {
 	
 	private Function_Disco pasta;
 	private Function_FTP ftp;
-	private ListaEnc lista;
-	private No no;
+	
+	// CONSTRUTOR DA CLASSE
+	public Drop_FTP () throws IOException {
+		pasta = new Function_Disco();
+		ftp = new Function_FTP();
+	}
+	
+	// CONSTRUTOR DA CLASSE
+	public Drop_FTP (String local, String remoto) throws IOException {
+		pasta = new Function_Disco();
+		ftp = new Function_FTP();
+		this.dirLocal = local;
+		this.dirRemoto = remoto;
+	}
 	
 	public int getIntervalo() {
 		return intervalo;
 	}
 	
 	// ARRAYS
-	private ArrayList<ListaEnc> arquivos = new ArrayList<ListaEnc>();
-		
 	private ArrayList<String> aFilesAmbosDir = new ArrayList<>();
 	private ArrayList<String> aFilesEnvFtp = new ArrayList<>();
 	private ArrayList<String> aFilesRecFtp = new ArrayList<>();
 	private ArrayList<String> aPastasAmbosDir = new ArrayList<>();
 	private ArrayList<String> aPastaRecFtp = new ArrayList<>();
 	private ArrayList<String> aPastaEnvFtp = new ArrayList<>();
-	
-	// CONSTRUTOR DA CLASSE
-	public Drop_FTP () throws IOException {
-		pasta = new Function_Disco();
-		ftp = new Function_FTP();
-		lista = new ListaEnc();
-		no = new No();
-		
-	}
 	
 	// INICIA A CAPTURA DOS DADOS
 	public void getDadosInicial () throws IOException {
@@ -61,15 +62,28 @@ public class Drop_FTP {
 	
 	// AQUI OS COMANDO PARA A APLICAÇÃO
 	// INICIA APP
-	public void iniciaAplicativo () throws Exception  {
+	public void getDados () throws Exception  {
 		this.getDadosInicial();
+	}
+	
+	public void iniciaAplicativo () throws Exception {
 		ftp.conect();
 		ftp.login();
-		ftp.criaListaArqFTP();
+		ftp.criaListaArqFTP(dirRemoto);
 		pasta.criaListaArqLocal(dirLocal);
-		verificaFileExcluido();
-		verificaPastaExcluida();
 		this.processaOsDados();
+		recusao();
+		feedBack();
+		sinc();
+	}
+	
+	public void iniciaAplicativo (String local, String remoto) throws Exception {
+		ftp.conect();
+		ftp.login();
+		ftp.criaListaArqFTP(remoto);
+		pasta.criaListaArqLocal(local);
+		this.processaOsDados();
+		recusao();
 		feedBack();
 		sinc();
 	}
@@ -157,10 +171,10 @@ public class Drop_FTP {
 			String nome = aFilesAmbosDir.get(i);
 			long dataNoFtp = Long.parseLong(ftp.dataModArqFTP(nome, dirRemoto)) - 300;
 			long dataNaPst = Long.parseLong(pasta.dataModArqLocal(nome, dirLocal));
-			if (dataNoFtp - 1 > dataNaPst) {
+			if (dataNoFtp > dataNaPst) {
 				aFilesRecFtp.add(aFilesAmbosDir.get(i));
 			}
-			if (dataNoFtp - 1 < dataNaPst) {
+			if (dataNoFtp < dataNaPst) {
 				aFilesEnvFtp.add(aFilesAmbosDir.get(i));
 			}
 		}
@@ -225,6 +239,49 @@ public class Drop_FTP {
 				this.aPastaEnvFtp.add(aux.get(i));
 			}
 		}
+	}
+	
+	// EM CASO DE HAVER PASTAS DENTRO DO DIRETUAL ATUAL
+	public void recusao () throws Exception {
+		String localAtual = null;
+		String remotoAtual = null;
+		String nome = null;
+		if ((aPastasAmbosDir.size()) != 0) {
+			for (int i = 0; i < aPastasAmbosDir.size(); i++) {
+				ftp.quit();
+				localAtual = aPastasAmbosDir.get(i);
+				remotoAtual = aPastasAmbosDir.get(i);
+				System.out.println(localAtual);
+				System.out.println(remotoAtual);
+				iniciaAplicativo(dirLocal+localAtual+"/", dirRemoto+remotoAtual+"/");
+			}
+
+		}
+		if ((aPastaEnvFtp.size()) != 0) {
+			for (int i = 0; i < aPastaEnvFtp.size(); i++) {
+				ftp.quit();
+				nome = aPastaEnvFtp.get(i);
+				localAtual = aPastaEnvFtp.get(i);
+				remotoAtual = aPastaEnvFtp.get(i);
+				ftp.criaDir(nome, remotoAtual);
+				System.out.println(localAtual + "/");
+				System.out.println(remotoAtual + "/");
+				iniciaAplicativo(dirLocal+localAtual+"/", dirRemoto+remotoAtual+"/");
+			}
+		}
+		if ((aPastaRecFtp.size()) != 0) {
+			for (int i = 0; i < aPastaEnvFtp.size(); i++) {
+				ftp.quit();
+				nome = aPastaRecFtp.get(i);
+				pasta.criaDir(dirLocal, aPastaRecFtp.get(i));
+				localAtual = aPastaRecFtp.get(i);
+				remotoAtual = aPastaRecFtp.get(i);
+				System.out.println(localAtual + "/");
+				System.out.println(remotoAtual + "/");
+				iniciaAplicativo(dirLocal+localAtual+"/", dirRemoto+remotoAtual+"/");
+			}
+		}
+
 	}
 	
 	// METODO PARA A SINCRONIZAÇÃO DOS DIRETÓRIOS

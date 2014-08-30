@@ -5,24 +5,24 @@ import java.util.List;
 
 public class ListaEnc {
 
-	List<No> lista;
+	List<No> noList;
 	
 	public ListaEnc () {
-		lista = new ArrayList<No>();
+		noList = new ArrayList<No>();
 	}
 	
 	public void addNo (No no) {
-		lista.add(no);
+		noList.add(no);
 	}
 	
 	public void remNo (No no, String name) {
-		if (lista.contains(no.getNome())) {
-			lista.remove(no);
+		if (noList.contains(no.getNome())) {
+			noList.remove(no);
 		}
 	}
 	
 	public String getNo (String nome) {
-		if (lista.contains(nome)) {
+		if (noList.contains(nome)) {
 			return nome;
 		}
 		return null;

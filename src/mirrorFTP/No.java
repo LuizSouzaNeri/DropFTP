@@ -3,7 +3,7 @@ package mirrorFTP;
 import java.util.ArrayList;
 
 
-public class No {
+public abstract class No {
 	
 	private char tipo;
 	private String nome;

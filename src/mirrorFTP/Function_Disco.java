@@ -87,5 +87,10 @@ public class Function_Disco {
 		}
 		return false;
 	}
-	
+	// CRIA DIRETÓRIO
+	public void criaDir(String localAtual, String nome) {
+		File dirLocal = new File (localAtual+nome);
+		dirLocal.mkdir();
+	}
+
 }

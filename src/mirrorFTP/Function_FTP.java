@@ -15,6 +15,12 @@ import java.util.StringTokenizer;
 
 public class Function_FTP {
 	
+	// VARIAVEIS LOCAIS
+	String host;
+	int port;
+	String user;
+	String pass;
+	
 	private Socket controle;
 	private InputStream iscontr;
 	private OutputStream oscontr;
@@ -22,21 +28,18 @@ public class Function_FTP {
 	private OutputStream osDados;
 	private InputStream isDados;
 	
+	protected ArrayList<String> aFilesNoFtp;
+	protected ArrayList<String> aFilesRemFtp;
+	protected ArrayList<String> aPastaNoFtp;
+	protected ArrayList<String> aPastaNoFtpRemovidas;
+	
 	public Function_FTP() throws IOException {
+		aFilesNoFtp = new ArrayList<>();
+		aFilesRemFtp = new ArrayList<>();
+		aPastaNoFtp = new ArrayList<>();
+		aPastaNoFtpRemovidas = new ArrayList<>();
 	}
 	
-	// ARRAYS
-	protected ArrayList<String> aFilesNoFtp = new ArrayList<>();
-	protected ArrayList<String> aFilesRemFtp = new ArrayList<>();
-	protected ArrayList<String> aPastaNoFtp = new ArrayList<>();
-	protected ArrayList<String> aPastaNoFtpRemovidas = new ArrayList<>();
-	
-	
-	// VARIAVEIS LOCAIS
-	String host;
-	int port;
-	String user;
-	String pass;
 	
 	// GET E SET
 	public String getHost() {
@@ -157,7 +160,8 @@ public class Function_FTP {
 	}
 	
 	// CRIA LISTA DIRETORIO
-	public void criaListaArqFTP () throws IOException {
+	public void criaListaArqFTP (String diretorio) throws IOException {
+		chargeWorkingDir(diretorio);
 		if ((aFilesNoFtp.size() == 0) && (aPastaNoFtp.size() == 0)) {
 		this.pasvMOD();
 		String comand = "LIST\r\n";
@@ -261,7 +265,7 @@ public class Function_FTP {
 		String resp = getControlResp().replaceAll(" ","").trim();
 		char[] aux = resp.toCharArray();
 		char[] aux2 = new char[12];
-		for (int i = 3; i <= 14; i++) {
+		for (int i = 3; i <= aux.length - 3; i++) {
 			aux2[i-3] = aux[i];
 		}
 		resp = new String(aux2);
@@ -291,4 +295,5 @@ public class Function_FTP {
 		this.oscontr.write(comand.getBytes());
 		this.getControlResp();
 	}
+
 }
