@@ -10,10 +10,17 @@ import java.util.TimeZone;
 public class Function_Disco {
 
 	// ARRAYS
-	protected ArrayList<String> aFilesNaPasta = new ArrayList<>();
-	protected ArrayList<String> aFilesRemPasta = new ArrayList<>();
-	protected ArrayList<String> aPastas = new ArrayList<>();
-	protected ArrayList<String> aPastasRemovidas = new ArrayList<>();
+	protected ArrayList<String> aFilesNaPasta;
+	protected ArrayList<String> aFilesRemPasta;
+	protected ArrayList<String> aPastas;
+	protected ArrayList<String> aPastasRemovidas;
+
+	public Function_Disco() {
+		aFilesNaPasta = new ArrayList<>();
+		aFilesRemPasta = new ArrayList<>();
+		aPastas = new ArrayList<>();
+		aPastasRemovidas = new ArrayList<>();
+	}
 
 	// EXCLUIR ARQUIVO
 	public boolean excluiArq(String nome, String diretorio) {
@@ -70,8 +77,8 @@ public class Function_Disco {
 	// SETA DATA ATUALIZADA NO ARQUIVO LOCAL BASEADA NA DATA DO FTP
 	public void setDataFile(String data, String nome, String diretorio)
 			throws ParseException {
-//		Long newdata = Long.parseLong(data) - 20005;
-//		data = newdata.toString();
+		// Long newdata = Long.parseLong(data) - 20005;
+		// data = newdata.toString();
 		File arquivo = new File(diretorio + nome);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC-3"));

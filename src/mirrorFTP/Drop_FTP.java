@@ -19,10 +19,24 @@ public class Drop_FTP {
 	private Function_Disco pasta;
 	private Function_FTP ftp;
 
+	// ARRAYS
+	private ArrayList<String> aFilesAmbosDir;
+	private ArrayList<String> aFilesEnvFtp;
+	private ArrayList<String> aFilesRecFtp;
+	private ArrayList<String> aPastasAmbosDir;
+	private ArrayList<String> aPastaRecFtp;
+	private ArrayList<String> aPastaEnvFtp;
+
 	// CONSTRUTOR DA CLASSE
 	public Drop_FTP() throws IOException {
 		pasta = new Function_Disco();
 		ftp = new Function_FTP();
+		aFilesAmbosDir = new ArrayList<>();
+		aFilesEnvFtp = new ArrayList<>();
+		aFilesRecFtp = new ArrayList<>();
+		aPastasAmbosDir = new ArrayList<>();
+		aPastaRecFtp = new ArrayList<>();
+		aPastaEnvFtp = new ArrayList<>();
 	}
 
 	// CONSTRUTOR DA CLASSE
@@ -31,19 +45,18 @@ public class Drop_FTP {
 		ftp = new Function_FTP();
 		this.dirLocal = local;
 		this.dirRemoto = remoto;
+		aFilesAmbosDir = new ArrayList<>();
+		aFilesEnvFtp = new ArrayList<>();
+		aFilesRecFtp = new ArrayList<>();
+		aPastasAmbosDir = new ArrayList<>();
+		aPastaRecFtp = new ArrayList<>();
+		aPastaEnvFtp = new ArrayList<>();
 	}
 
+	// GET
 	public int getIntervalo() {
 		return intervalo;
 	}
-
-	// ARRAYS
-	private static ArrayList<String> aFilesAmbosDir = new ArrayList<>();
-	private static ArrayList<String> aFilesEnvFtp = new ArrayList<>();
-	private static ArrayList<String> aFilesRecFtp = new ArrayList<>();
-	private static ArrayList<String> aPastasAmbosDir = new ArrayList<>();
-	private static ArrayList<String> aPastaRecFtp = new ArrayList<>();
-	private static ArrayList<String> aPastaEnvFtp = new ArrayList<>();
 
 	// INICIA A CAPTURA DOS DADOS
 	public void getDadosInicial() throws IOException {
@@ -85,7 +98,7 @@ public class Drop_FTP {
 		feedBack();
 		sinc();
 		recSincPasta();
-//		recSincPastaRem();
+		// recSincPastaRem();
 	}
 
 	public void iniciaAplicativo(String local, String remoto) throws Exception {
@@ -98,7 +111,7 @@ public class Drop_FTP {
 		feedBack();
 		sinc();
 		recSincPasta();
-//		recSincPastaRem();
+		// recSincPastaRem();
 	}
 
 	// PROCESSA OS DADOS OBTIDOS E FORMA A LISTA DE AQUIVOS DO DISCO, DO FTP E
@@ -315,13 +328,12 @@ public class Drop_FTP {
 		String remotoAtual;
 		if ((pasta.aPastasRemovidas.size() != 0)) {
 			for (int i = 0; i < pasta.aPastasRemovidas.size(); i++) {
-				
+
 			}
 		}
 		if ((ftp.aPastaNoFtpRemovidas.size() != 0)) {
 			start();
 			if ((ftp.aPastaNoFtpRemovidas.size() != 0)) {
-
 
 			}
 			finalizar();
