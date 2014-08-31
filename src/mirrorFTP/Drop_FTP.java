@@ -98,7 +98,6 @@ public class Drop_FTP {
 		feedBack();
 		sinc();
 		recSincPasta();
-		// recSincPastaRem();
 	}
 
 	public void iniciaAplicativo(String local, String remoto) throws Exception {
@@ -111,7 +110,6 @@ public class Drop_FTP {
 		feedBack();
 		sinc();
 		recSincPasta();
-		// recSincPastaRem();
 	}
 
 	// PROCESSA OS DADOS OBTIDOS E FORMA A LISTA DE AQUIVOS DO DISCO, DO FTP E
@@ -319,26 +317,6 @@ public class Drop_FTP {
 			}
 			finalizar();
 		}
-	}
-
-	// EM CASO DE HAVER PASTAS REMOVIDAS DENTRO DE PASTAS
-	public void recSincPastaRem() throws IOException {
-		String nome;
-		String localAtual;
-		String remotoAtual;
-		if ((pasta.aPastasRemovidas.size() != 0)) {
-			for (int i = 0; i < pasta.aPastasRemovidas.size(); i++) {
-
-			}
-		}
-		if ((ftp.aPastaNoFtpRemovidas.size() != 0)) {
-			start();
-			if ((ftp.aPastaNoFtpRemovidas.size() != 0)) {
-
-			}
-			finalizar();
-		}
-
 	}
 
 	// METODO PARA A SINCRONIZAÇÃO DOS DIRETÓRIOS
