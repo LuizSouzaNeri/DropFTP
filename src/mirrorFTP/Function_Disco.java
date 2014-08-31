@@ -70,6 +70,8 @@ public class Function_Disco {
 	// SETA DATA ATUALIZADA NO ARQUIVO LOCAL BASEADA NA DATA DO FTP
 	public void setDataFile(String data, String nome, String diretorio)
 			throws ParseException {
+//		Long newdata = Long.parseLong(data) - 20005;
+//		data = newdata.toString();
 		File arquivo = new File(diretorio + nome);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC-3"));

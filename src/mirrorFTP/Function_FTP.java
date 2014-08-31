@@ -263,7 +263,8 @@ public class Function_FTP {
 		String comand = "MDTM " + nome + "\r\n";
 		this.oscontr.write(comand.getBytes());
 		String resp = getControlResp().replaceAll(" ","").trim();
-		return resp.substring(3);
+		resp = resp.substring(3,15);
+		return resp;
 	}
 	
 	// EXCLUIR ARQUIVO FTP

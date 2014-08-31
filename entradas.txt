@@ -1,6 +1,6 @@
 ftp.xpg.com.br
 21
-60000
+60
 luizpinhao
 atiradeon
 C:/ftp/

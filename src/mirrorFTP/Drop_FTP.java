@@ -38,12 +38,12 @@ public class Drop_FTP {
 	}
 
 	// ARRAYS
-	private ArrayList<String> aFilesAmbosDir = new ArrayList<>();
-	private ArrayList<String> aFilesEnvFtp = new ArrayList<>();
-	private ArrayList<String> aFilesRecFtp = new ArrayList<>();
-	private ArrayList<String> aPastasAmbosDir = new ArrayList<>();
-	private ArrayList<String> aPastaRecFtp = new ArrayList<>();
-	private ArrayList<String> aPastaEnvFtp = new ArrayList<>();
+	private static ArrayList<String> aFilesAmbosDir = new ArrayList<>();
+	private static ArrayList<String> aFilesEnvFtp = new ArrayList<>();
+	private static ArrayList<String> aFilesRecFtp = new ArrayList<>();
+	private static ArrayList<String> aPastasAmbosDir = new ArrayList<>();
+	private static ArrayList<String> aPastaRecFtp = new ArrayList<>();
+	private static ArrayList<String> aPastaEnvFtp = new ArrayList<>();
 
 	// INICIA A CAPTURA DOS DADOS
 	public void getDadosInicial() throws IOException {
@@ -53,7 +53,7 @@ public class Drop_FTP {
 				new InputStreamReader(isFile));
 		ftp.setHost(brFile.readLine());
 		ftp.setPort(brFile.readLine());
-		this.intervalo = new Integer(brFile.readLine());
+		this.intervalo = new Integer(brFile.readLine()) * 1000;
 		ftp.setUser(brFile.readLine());
 		ftp.setPass(brFile.readLine());
 		this.dirLocal = brFile.readLine();
@@ -82,10 +82,10 @@ public class Drop_FTP {
 		ftp.criaListaArqFTP(dirRemoto);
 		pasta.criaListaArqLocal(dirLocal);
 		this.processaOsDados();
-		// pasta.aFilesRemPasta.add("teste10");
 		feedBack();
 		sinc();
 		recSincPasta();
+//		recSincPastaRem();
 	}
 
 	public void iniciaAplicativo(String local, String remoto) throws Exception {
@@ -95,10 +95,10 @@ public class Drop_FTP {
 		ftp.criaListaArqFTP(dirRemoto);
 		pasta.criaListaArqLocal(dirLocal);
 		this.processaOsDados();
-		// pasta.aFilesRemPasta.add("teste10");
 		feedBack();
 		sinc();
 		recSincPasta();
+//		recSincPastaRem();
 	}
 
 	// PROCESSA OS DADOS OBTIDOS E FORMA A LISTA DE AQUIVOS DO DISCO, DO FTP E
@@ -309,24 +309,24 @@ public class Drop_FTP {
 	}
 
 	// EM CASO DE HAVER PASTAS REMOVIDAS DENTRO DE PASTAS
-	public void recSincPastaRem() {
-		if (((pasta.aPastasRemovidas.size() != 0))
-				|| ((ftp.aPastaNoFtpRemovidas.size() != 0))) {
-			String nome;
-			String localAtual;
-			String remotoAtual;
-			if ((pasta.aPastasRemovidas.size() != 0)) {
-				for (int i = 0; i < pasta.aPastasRemovidas.size(); i++) {
-					nome = pasta.aPastasRemovidas.get(i);
-					localAtual = dirLocal;
-					remotoAtual = dirRemoto + aPastaRecFtp.get(i);
-
-				}
-			}
-			if ((ftp.aPastaNoFtpRemovidas.size() != 0)) {
-
+	public void recSincPastaRem() throws IOException {
+		String nome;
+		String localAtual;
+		String remotoAtual;
+		if ((pasta.aPastasRemovidas.size() != 0)) {
+			for (int i = 0; i < pasta.aPastasRemovidas.size(); i++) {
+				
 			}
 		}
+		if ((ftp.aPastaNoFtpRemovidas.size() != 0)) {
+			start();
+			if ((ftp.aPastaNoFtpRemovidas.size() != 0)) {
+
+
+			}
+			finalizar();
+		}
+
 	}
 
 	// METODO PARA A SINCRONIZAÇÃO DOS DIRETÓRIOS
