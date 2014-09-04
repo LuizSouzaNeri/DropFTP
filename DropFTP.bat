@@ -1,1 +1,0 @@
-cmd /k java -jar DropFTP.jar  
